@@ -19,22 +19,24 @@ def game_exit():
 """
 def set_players():
 
-    num = int(input('Выберите количество игроков: '))
-    while len(players_list) < num:
-        player = Player()
-        player.set_player(input('Введите имя: '),
-                          input('Введите роль (1-компьютер, 2-человек): '))
-        players_list.append(player)
-    print('В игре участвуют игроки:')
-    for i, item in enumerate(players_list):
-        if item.player_role == '1':
-            role = 'Компьютер'
-        elif item.player_role == '2':
-            role = 'Человек'
-        else:
-            role = 'none'
-        print(' Игрок {}: имя - {}, роль - {}'.format(i+1, item.player_name, role))
-
+    num = input('Выберите количество игроков: ')
+    if num.isdigit():
+        while len(players_list) < int(num):
+            player = Player()
+            player.set_player(input('Введите имя: '),
+                              input('Введите роль (1-компьютер, 2-человек): '))
+            players_list.append(player)
+        print('В игре участвуют игроки:')
+        for i, item in enumerate(players_list):
+            if item.player_role == '1':
+                role = 'Компьютер'
+            elif item.player_role == '2':
+                role = 'Человек'
+            else:
+                role = 'none'
+            print(' Игрок {}: имя - {}, роль - {}'.format(i+1, item.player_name, role))
+    else:
+        print('количество должно быть цифрой')
 # а вот здесь и сама "фича"
 
 players_list = []
