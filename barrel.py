@@ -11,7 +11,11 @@ class Barrel:
         self.bag = [i for i in range(1, 91)]
         self.count = 90
 
+    def __str__(self):
+        return f'{self.count}'
+
     def next(self):
         self.digit = random.choice(self.bag)
         self.bag.remove(self.digit)
         self.count = len(self.bag)
+

@@ -1,13 +1,11 @@
 """
-   класс "Карточка". Имеет три метода:
-   1. New
-   Новая генерируется тремя списками (по количеству строк в карточке)
+   класс "Карточка". Имеет методы:
+   1. Init
+   Генерируется новая карточка тремя списками (по количеству строк в карточке)
    2. Update
    Пробегаем по карточке и смотрим есть ли выпавшая цифра. Если есть, меняем ее на ' '
-   3. Show
-   Показывем карточку.
-   Задумка такова, что форма карточки задается в одном месте в свойстве design.
-   А данные вставляется в форму
+   3. Str
+   Показывем карточку. Пробел добавляется если в числе одна цифра
 """
 import random
 
@@ -21,18 +19,13 @@ class Card:
         a.encode('utf-8')
         b.encode('utf-8')
         self.design = a + '\n'+'| {} | {} | {} | {} | {} |' + '\n' + b + '\n'
-
-    def new(self):
         all_set = (set(random.randint(1, 90) for i in range(91)))
         for i in range(3):
             row = sorted(set(random.sample(all_set, 5)))
             all_set.difference_update(row)
             self.card.append(row)
 
-    def show(self):
-
-# эта конструкция реализует вывод в позиции формы карточки,
-# при этом добавляется пробел к цифрам, имеющим один знак (чтобы форма карточки  не разъезжалась)
+    def __str__(self):
         str_card = ''
         for item in self.card:
             s1 = str(item[0]) + ' ' if len(str(item[0])) == 1 else str(item[0])
@@ -43,6 +36,18 @@ class Card:
             str_card += str(self.design).format(s1, s2, s3, s4, s5)
         return str_card
 
+    def __eq__(self, other):
+        for row_a in self.card:
+            for row_b in other:
+                if row_a == row_b:
+                    return True
+                else:
+                    return False
+
+    def __lt__(self, other):
+
+        return True
+
     def update(self, digit):
         digit_is_present = False
         for row in self.card:
@@ -51,3 +56,5 @@ class Card:
                     row[i] = ' '
                     digit_is_present = True
         return digit_is_present
+
+

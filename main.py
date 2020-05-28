@@ -24,23 +24,18 @@ def game_exit():
 
 
 def set_players():
-
+    player_prev = Player()
     num = input('Выберите количество игроков: ')
     if num.isdigit():
-        while len(players_list) < int(num):
+        for i in range(int(num)):
             player = Player()
             player.set_player(input('Введите имя: '),
                               input('Введите роль (1-компьютер, 2-человек): '))
-            players_list.append(player)
-        print('В игре участвуют игроки:')
-        for i, item in enumerate(players_list):
-            if item.player_role == '1':
-                role = 'Компьютер'
-            elif item.player_role == '2':
-                role = 'Человек'
+            if player == player_prev:
+                print('Игрок с таким именем уже существует')
             else:
-                role = 'none'
-            print(' Игрок {}: имя - {}, роль - {}'.format(i+1, item.player_name, role))
+                players_list.append(player)
+                player_prev = player
     else:
         print('количество должно быть цифрой')
 # а вот здесь и сама "фича"
@@ -59,19 +54,25 @@ players_list = []
 
 
 def game():
+    win_card = [[' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ']]
     print('играем!')
     barrel = Barrel()
     if not players_list:
         print('нужно сначала задать игроков')
     else:
+        print('В игре участвуют игроки:')
+        for i, item in enumerate(players_list):
+            if item.player_role == '1':
+                role = 'Компьютер'
+            elif item.player_role == '2':
+                role = 'Человек'
+            else:
+                role = 'none'
+            print(' Игрок {}: имя - {}, роль - {}'.format(i + 1, item.player_name, role))
         for i in range(len(players_list)):
             print('--- Игрок {} ---'.format(players_list[i].player_name))
-            print(players_list[i].card.show())
-        while True:
-            enter = input('нажмите кнопку -Ввод- для следующего хода, -3- выход ')
-            if enter == '3':
-                game_exit()
-            else:
+            print(players_list[i].card)
+            while True:
                 barrel.next()
                 print('\n', 'Цифра - ', barrel.digit, 'в мешке осталось - ', barrel.count)
                 for player in players_list:
@@ -95,10 +96,8 @@ def game():
                                     print('повторите ввод')
                     print('--- Игрок {} ---'.format(player.player_name))
                     player.card.update(barrel.digit)
-                    print(player.card.show())
-                    if (player.card.card[0].count(' ') &
-                        player.card.card[1].count(' ') &
-                        player.card.card[2].count(' ')) == 5:
+                    print(player.card)
+                    if player.card == win_card:
                         print('Игра завершена. Победил Игрок', player.player_name, '\n', 3*chr(11088), 'CONGRATULATIONS!', 3*chr(11088))
                         game_exit()
 
